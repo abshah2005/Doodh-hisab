@@ -1,0 +1,69 @@
+name: Build Android APK
+
+# Builds a release APK on GitHub's runners (which have the Android SDK
+# preinstalled) and attaches it to a "latest" prerelease so it can be
+# downloaded and installed directly on a phone.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # lets you run it manually from the Actions tab
+
+permissions:
+  contents: write # needed to publish the release asset
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Generate platform folders (if missing)
+        run: flutter create --platforms=android --project-name doodh_hisaab --org com.doodhhisaab .
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Rename APK
+        run: cp build/app/outputs/flutter-apk/app-release.apk doodh-hisaab.apk
+
+      - name: Upload APK as build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: doodh-hisaab-apk
+          path: doodh-hisaab.apk
+
+      - name: Publish APK to "latest" release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest build
+          prerelease: true
+          files: doodh-hisaab.apk
+          body: |
+            Latest Doodh Hisaab APK, built automatically from `main`.
+
+            Download `doodh-hisaab.apk` below and open it on your Android phone
+            to install (you may need to allow "install from unknown sources").
