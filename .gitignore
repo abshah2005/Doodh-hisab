@@ -17,7 +17,6 @@ migrate_working_dir/
 .idea/
 
 # VS Code
-.vscode/
 
 # Flutter / Dart / Pub
 **/doc/api/
@@ -66,3 +65,5 @@ coverage/
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+config.bat
+node_modules
