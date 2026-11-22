@@ -1,0 +1,38 @@
+name: doodh_hisaab
+description: "Doodh Hisaab - a daily ledger app for the Pakistani doodh wala. Record each day's supply in under 2 minutes and generate accurate monthly bills with naga days clearly shown."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Local, offline-first database
+  sqflite: ^2.3.3
+  path: ^1.9.0
+  path_provider: ^2.1.4
+
+  # Simple state management / dependency injection
+  provider: ^6.1.2
+
+  # Dates, number and currency formatting
+  intl: ^0.19.0
+
+  # Share bills to WhatsApp via the system share sheet
+  share_plus: ^10.0.2
+
+  # Rendering a bill to an image for sharing
+  screenshot: ^3.0.0
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
